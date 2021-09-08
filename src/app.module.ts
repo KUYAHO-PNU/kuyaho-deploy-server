@@ -4,7 +4,6 @@ import { TypeOrmModule, TypeOrmModuleAsyncOptions } from "@nestjs/typeorm";
 import { DatabaseType } from "typeorm";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
-// import { AppConfigModule } from "./config/app/app-config.module";
 import { MysqlConfigModule } from "./config/database/mysql-config.module";
 import { MysqlConfigService } from "./config/database/mysql-config.service";
 import { FileEntity } from "./entities/file.entity";
