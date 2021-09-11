@@ -13,10 +13,10 @@ export class K8sController {
         return await this.containerService.createDeployment(name, image, port);
     }
 
-    @Get('deleteDeployment')
-    async deleteDeployment(): Promise<any> {
+    @Get('deleteAll')
+    async deleteAll(): Promise<any> {
         const name = 'demo';
-        return await this.containerService.deleteDeployment(name);
+        return await this.containerService.deleteAll(name);
     }
 
     @Get('createService')

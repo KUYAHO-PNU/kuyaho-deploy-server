@@ -34,16 +34,16 @@ spec:
   selector:
     matchLabels:
       app: ${name}
-    template:
-      metadata:
-        labels:
-          app: ${name}
-  spec:
-    containers:
-    - name: ${name}
-      image: ${image}
-      ports:
-      - containerPort: ${port}`;
+  template:
+    metadata:
+      labels:
+        app: ${name}
+    spec:
+      containers:
+      - name: ${name}
+        image: ${image}
+        ports:
+        - containerPort: ${port}`;
         try {
             fs.writeFileSync('deployment.yaml', data, 'utf8');
             console.log(name + ' deployment.yaml 파일 생성 완료');
@@ -54,7 +54,7 @@ spec:
         }
     }
 
-    async deleteDeployment(name: String): Promise<any> {
+    async deleteAll(name: String): Promise<any> {
         shell.exec(`kubectl delete all --selector app=${name}`);
         return `kubectl delete all --selector app=${name}`;
     }
@@ -86,7 +86,7 @@ spec:
     }
 
     async portForwarding(name: String, targetPort: Number, port: Number): Promise<any> {
-        shell.exec(`kubectl port-forward ${name} ${targetPort}:${port}`);
+        shell.exec(`kubectl port-forward service/${name}-service ${targetPort}:${port}`);
     }
 }
 
