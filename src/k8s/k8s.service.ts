@@ -45,6 +45,8 @@ spec:
         ports:
         - containerPort: ${port}`;
     try {
+      if (fs.existsSync(`../${name}`))
+        fs.mkdirSync(`../${name}`);
       fs.writeFileSync(`../${name}/deployment.yaml`, data, 'utf8');
       console.log(name + ' deployment.yaml 파일 생성 완료');
       shell.exec(`kubectl apply -f ../${name}/deployment.yaml`);
@@ -74,6 +76,8 @@ status:
     ingress:
     - ip: 3.14.59.87`;
     try {
+      if (fs.existsSync(`../${name}`))
+        fs.mkdirSync(`../${name}`);
       fs.writeFileSync(`../${name}/service.yaml`, data, 'utf8');
       console.log(name + ' service.yaml 파일 생성 완료');
       shell.exec(`kubectl apply -f ../${name}/service.yaml`);
