@@ -45,7 +45,7 @@ spec:
         ports:
         - containerPort: ${port}`;
     try {
-      if (fs.existsSync(`../${name}`))
+      if (!fs.existsSync(`../${name}`))
         fs.mkdirSync(`../${name}`);
       fs.writeFileSync(`../${name}/deployment.yaml`, data, 'utf8');
       console.log(name + ' deployment.yaml 파일 생성 완료');
@@ -70,17 +70,18 @@ spec:
     protocol: TCP
   selector:
     app: ${name}
-  type: LoadBalancer
-status:
-  loadBalancer:
-    ingress:
-    - ip: 3.14.59.87`;
+  type: LoadBalancer`;
     try {
-      if (fs.existsSync(`../${name}`))
+      if (!fs.existsSync(`../${name}`))
         fs.mkdirSync(`../${name}`);
       fs.writeFileSync(`../${name}/service.yaml`, data, 'utf8');
       console.log(name + ' service.yaml 파일 생성 완료');
       shell.exec(`kubectl apply -f ../${name}/service.yaml`);
+      shell.exec(`kubectl get service > service.txt`);
+      fs.readFile(`service.txt`, (err, data)=>{
+        if (err) return console.log(err);
+        return data;
+    })
     }
     catch(err) {
       console.log(name + ' service.yaml 파일 생성 중 에러\n' + err);
