@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import * as fs from 'fs';
+import { delay } from 'rxjs';
 import shell = require('shelljs')
 
 @Injectable()
@@ -21,7 +22,7 @@ export class K8sService {
   }
   */
 
-  async createDeployment(name: String, image: String, port: Number): Promise<any> {
+  async createDeployment(name: String, image: String, port: string): Promise<any> {
     const data = `
 apiVersion: apps/v1
 kind: Deployment
@@ -45,18 +46,16 @@ spec:
         ports:
         - containerPort: ${port}`;
     try {
-      if (!fs.existsSync(`../${name}`))
-        fs.mkdirSync(`../${name}`);
-      fs.writeFileSync(`../${name}/deployment.yaml`, data, 'utf8');
+      fs.writeFileSync(`/home/ec2-user/${name}/deployment.yaml`, data, 'utf8');
       console.log(name + ' deployment.yaml 파일 생성 완료');
-      shell.exec(`kubectl apply -f ../${name}/deployment.yaml`);
+      shell.exec(`kubectl apply -f /home/ec2-user/${name}/deployment.yaml`);
     }
     catch(err) {
       console.log(name + ' deployment.yaml 파일 생성 중 에러\n' + err); 
     }
   }
 
-  async createService(name: String, port: Number): Promise<String> {
+  async createService(name: String, port: string): Promise<String> {
     const data = `
 apiVersion: v1
 kind: Service
@@ -72,12 +71,10 @@ spec:
     app: ${name}
   type: LoadBalancer`;
     try {
-      if (!fs.existsSync(`../${name}`))
-        fs.mkdirSync(`../${name}`);
-      fs.writeFileSync(`../${name}/service.yaml`, data, 'utf8');
+      fs.writeFileSync(`/home/ec2-user/${name}/service.yaml`, data, 'utf8');
       console.log(name + ' service.yaml 파일 생성 완료');
-      shell.exec(`kubectl apply -f ../${name}/service.yaml`);
-      
+      shell.exec(`kubectl apply -f /home/ec2-user/${name}/service.yaml`);
+      delay(500);
       shell.exec(`kubectl get service > service.txt`);
 
       return new Promise((resolve, reject) => {

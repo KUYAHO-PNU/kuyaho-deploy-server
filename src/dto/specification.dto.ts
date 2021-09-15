@@ -11,4 +11,5 @@ export class specificationDto{
     readonly timeout: number;
     readonly vpcConfig: string;
     readonly plaform: string;
+    readonly port: number;
 }

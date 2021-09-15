@@ -1,4 +1,5 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
+import { specificationDto } from 'src/dto/specification.dto';
 import { K8sService } from './k8s.service';
 
 @Controller('k8s')
@@ -6,23 +7,21 @@ export class K8sController {
     constructor(private readonly containerService: K8sService) {}
 
     @Get('createDeployment')
-    async createDeployment(): Promise<any> {
-        const name = 'demo';
-        const image = 'cloudnatived/demo:hello'
-        const port = 8888;
+    // const image = 'cloudnatived/demo:hello'
+    async createDeployment(@Param('name') name:string ,@Param('image') image:string, @Param('port') port:string): Promise<any> {
+        
         return await this.containerService.createDeployment(name, image, port);
     }
 
     @Get('createService')
-    async createService(): Promise<String> {
-        const name = 'demo';
-        const port = 8888;
+    async createService(@Param('name') name:string ,@Param('port') port:string): Promise<String> {
+
         return await this.containerService.createService(name, port);
     }
 
     @Get('deleteAll')
-    async deleteAll(): Promise<String> {
-        const name = 'demo';
+    async deleteAll(@Param('name') name:string): Promise<String> {
+        
         return await this.containerService.deleteAll(name);
     }
     
