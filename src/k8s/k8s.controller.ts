@@ -14,14 +14,14 @@ export class K8sController {
     }
 
     @Get('createService')
-    async createService(): Promise<any> {
+    async createService(): Promise<String> {
         const name = 'demo';
         const port = 8888;
         return await this.containerService.createService(name, port);
     }
 
     @Get('deleteAll')
-    async deleteAll(): Promise<any> {
+    async deleteAll(): Promise<String> {
         const name = 'demo';
         return await this.containerService.deleteAll(name);
     }
