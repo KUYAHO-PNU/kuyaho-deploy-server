@@ -5,7 +5,7 @@ import { NestExpressApplication } from "@nestjs/platform-express";
 
 async function bootstrap() {
   /* Create NestExpress Server APP */
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {cors:true});
 
   // /* Project ENV 환경 로드 */
   // const appConfig: AppConfigService = app.get("AppConfigService");

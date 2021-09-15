@@ -35,15 +35,15 @@ export class AppService {
     
       //dockerignore
       line = "node_modules\ndist"
-      fs.writeFile("/home/ec2-user/"+data.functionName+"/.dockerignore",line,'utf-8',(err)=>{})
+      fs.writeFile("/home/ec2-user/clone/"+data.functionName+"/.dockerignore",line,'utf-8',(err)=>{})
       
   
       //update json.file
       // line = "\"prestart:prod\": \"rimraf dist && npm run build\","
       // fs.readFile("/home/ec2-user/gyuwon/server/user/package.json",,)
-      // fs.writeFile("/home/ec2-user/gyuwon/server/user/package.json",)
+      // fs.writeFile("/home/ec2-user/gyuwon/server/user/package.json",)ls
 
-      shell.exec(`docker build -t dhd6573/${data.functionName}:demo /home/ec2-user/${data.functionName}/.`)
+      shell.exec(`docker build -t dhd6573/${data.functionName}:demo /home/ec2-user/clone/${data.functionName}/.`)
       shell.exec(`docker push dhd6573/${data.functionName}:demo`)
     }
   //------------------File CRUD----------------------------
