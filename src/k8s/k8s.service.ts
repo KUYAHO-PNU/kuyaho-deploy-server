@@ -110,19 +110,19 @@ spec:
             let end = content.indexOf(' ', start + 1);
             let name = content.substring(start + 1, end);
 
-            start = end + 1;
+            start = end;
             end = content.indexOf(' ', start + 1);
             let ready = content.substring(start + 1, end);
 
-            start = end + 1;
+            start = end;
             end = content.indexOf(' ', start + 1);
             let status = content.substring(start + 1, end);
 
-            start = end + 1;
+            start = end;
             end = content.indexOf(' ', start + 1);
             let restarts = content.substring(start + 1, end);
 
-            start = end + 1;
+            start = end;
             end = content.indexOf(' ', start + 1);
             let age = content.substring(start + 1, end);
 
@@ -159,23 +159,23 @@ spec:
             let end = content.indexOf(' ', start + 1);
             let name = content.substring(start + 1, end);
 
-            start = end + 1;
+            start = end;
             end = content.indexOf(' ', start + 1);
             let type = content.substring(start + 1, end);
 
-            start = end + 1;
+            start = end;
             end = content.indexOf(' ', start + 1);
             let clusterIP = content.substring(start + 1, end);
 
-            start = end + 1;
+            start = end;
             end = content.indexOf(' ', start + 1);
             let externalIP = content.substring(start + 1, end);
 
-            start = end + 1;
+            start = end;
             end = content.indexOf(' ', start + 1);
             let port = content.substring(start + 1, end);
 
-            start = end + 1;
+            start = end;
             end = content.indexOf(' ', start + 1);
             let age = content.substring(start + 1, end);
 
