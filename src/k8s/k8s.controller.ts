@@ -26,6 +26,10 @@ export class K8sController {
     async getPods(): Promise<Array<Object>> {
         return await this.containerService.getPods();
     }
+    @Get('getPodByName')
+    async getPodByName(@Query('name') functionName: string){
+        return await this. containerService.getPodByName(functionName);
+    }
 
     @Get('getServices')
     async getServices(): Promise<Array<Object>> {
