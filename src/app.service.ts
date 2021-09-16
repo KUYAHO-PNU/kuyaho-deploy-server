@@ -35,13 +35,17 @@ export class AppService {
     
       //dockerignore
       line = "node_modules\ndist"
+<<<<<<< HEAD
       fs.writeFileSync("/home/ec2-user/clone/"+data.functionName+"/.dockerignore",line,'utf-8')
+=======
+      fs.writeFile("/home/ec2-user/clone/"+data.functionName+"/.dockerignore",line,'utf-8',(err)=>{})
+>>>>>>> fc4016a6b4ae30096d2bfc4d18504410f68de04c
       
   
       //update json.file
       // line = "\"prestart:prod\": \"rimraf dist && npm run build\","
       // fs.readFile("/home/ec2-user/gyuwon/server/user/package.json",,)
-      // fs.writeFile("/home/ec2-user/gyuwon/server/user/package.json",)
+      // fs.writeFile("/home/ec2-user/gyuwon/server/user/package.json",)ls
 
       shell.exec(`docker build -t dhd6573/${data.functionName}:demo /home/ec2-user/clone/${data.functionName}/.`)
       shell.exec(`docker push dhd6573/${data.functionName}:demo`)
