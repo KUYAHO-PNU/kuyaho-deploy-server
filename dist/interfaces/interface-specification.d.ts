@@ -8,4 +8,5 @@ export interface specification {
     timeout: Number;
     vpcConfig: String;
     userId: String;
+    port: Number;
 }

@@ -25,6 +25,6 @@ export class SpecEntity implements specification{
     @Column()
     port: number;
     @Column()
-    sourcecodeURL: string;
+    sourceCodeURL: string;
 }
 
