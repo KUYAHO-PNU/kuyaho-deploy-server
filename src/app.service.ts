@@ -35,11 +35,7 @@ export class AppService {
     
       //dockerignore
       line = "node_modules\ndist"
-<<<<<<< HEAD
       fs.writeFileSync("/home/ec2-user/clone/"+data.functionName+"/.dockerignore",line,'utf-8')
-=======
-      fs.writeFile("/home/ec2-user/clone/"+data.functionName+"/.dockerignore",line,'utf-8',(err)=>{})
->>>>>>> fc4016a6b4ae30096d2bfc4d18504410f68de04c
       
   
       //update json.file
