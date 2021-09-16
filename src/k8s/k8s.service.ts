@@ -50,6 +50,7 @@ spec:
       fs.writeFileSync(`../${name}/deployment.yaml`, data, 'utf8');
       console.log(name + ' deployment.yaml 파일 생성 완료');
       shell.exec(`kubectl apply -f ../${name}/deployment.yaml`);
+      
     }
     catch(err) {
       console.log(name + ' deployment.yaml 파일 생성 중 에러\n' + err); 

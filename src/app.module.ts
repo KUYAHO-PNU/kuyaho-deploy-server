@@ -12,13 +12,21 @@ import { TerminalResEntity } from "./models/terminal/entities/TermianlCmdEntity.
 import { TerminalController } from "./models/terminal/terminal.controller";
 import { TerminalModule } from "./models/terminal/terminal.module";
 import { MysqlConfigModuleProvider } from "./provider/provider.module";
-import { K8sController } from './k8s/k8s.controller';
-import { K8sService } from './k8s/k8s.service';
-import { K8sModule } from './k8s/k8s.module';
+import { K8sController } from "./k8s/k8s.controller";
+import { K8sService } from "./k8s/k8s.service";
+import { K8sModule } from "./k8s/k8s.module";
+import { GqlTerminalModule } from "./models/gql-terminal/gql-terminal.module";
+import { GqlTerminalService } from "./models/gql-terminal/gql-terminal.service";
+import { GqlTerminalResolver } from "./models/gql-terminal/gql-terminal.resolver";
 
 @Module({
-  imports: [MysqlConfigModuleProvider, TerminalModule, K8sModule],
+  imports: [
+    MysqlConfigModuleProvider,
+    GqlTerminalModule,
+    TerminalModule,
+    K8sModule,
+  ],
   controllers: [AppController, TerminalController, K8sController],
-  providers: [AppService, K8sService],
+  providers: [AppService],
 })
 export class AppModule {}

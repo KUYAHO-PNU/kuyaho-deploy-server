@@ -8,9 +8,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MysqlConfigModuleProvider = void 0;
 const common_1 = require("@nestjs/common");
+const graphql_1 = require("@nestjs/graphql");
 const typeorm_1 = require("@nestjs/typeorm");
 const mysql_config_module_1 = require("../config/database/mysql-config.module");
 const mysql_config_service_1 = require("../config/database/mysql-config.service");
+const command_entity_1 = require("../models/gql-terminal/entities/command.entity");
 const TermianlCmdEntity_entity_1 = require("../models/terminal/entities/TermianlCmdEntity.entity");
 let MysqlConfigModuleProvider = class MysqlConfigModuleProvider {
 };
@@ -26,10 +28,15 @@ MysqlConfigModuleProvider = __decorate([
                     username: config.username,
                     password: config.password,
                     database: config.database,
-                    entities: [TermianlCmdEntity_entity_1.TerminalResEntity],
+                    entities: [TermianlCmdEntity_entity_1.TerminalResEntity, command_entity_1.Command],
                     synchronize: false,
                 }),
                 inject: [mysql_config_service_1.MysqlConfigService],
+            }),
+            graphql_1.GraphQLModule.forRoot({
+                autoSchemaFile: true,
+                debug: true,
+                playground: true,
             }),
         ],
     })

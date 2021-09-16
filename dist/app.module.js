@@ -13,12 +13,20 @@ const app_service_1 = require("./app.service");
 const terminal_controller_1 = require("./models/terminal/terminal.controller");
 const terminal_module_1 = require("./models/terminal/terminal.module");
 const provider_module_1 = require("./provider/provider.module");
+const k8s_controller_1 = require("./k8s/k8s.controller");
+const k8s_module_1 = require("./k8s/k8s.module");
+const gql_terminal_module_1 = require("./models/gql-terminal/gql-terminal.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [provider_module_1.MysqlConfigModuleProvider, terminal_module_1.TerminalModule],
-        controllers: [app_controller_1.AppController, terminal_controller_1.TerminalController],
+        imports: [
+            provider_module_1.MysqlConfigModuleProvider,
+            gql_terminal_module_1.GqlTerminalModule,
+            terminal_module_1.TerminalModule,
+            k8s_module_1.K8sModule,
+        ],
+        controllers: [app_controller_1.AppController, terminal_controller_1.TerminalController, k8s_controller_1.K8sController],
         providers: [app_service_1.AppService],
     })
 ], AppModule);
