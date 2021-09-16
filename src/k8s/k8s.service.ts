@@ -102,7 +102,7 @@ spec:
         else {
           let podArray = new Array();
           let content = data.toString().replace(/ +/g, " "); //여러 공백을 공백 하나로 치환
-          content = content.replace("\n", " ");
+          content = content.replace('\n', ' ');
           let index = content.indexOf('AGE');
           index = content.indexOf(' ', index + 1);
           while(index != -1) {
@@ -159,7 +159,7 @@ spec:
         else {
           let serviceArray = new Array();
           let content = data.toString().replace(/ +/g, " "); //여러 공백을 공백 하나로 치환
-          content = content.toString().replace("\n", " ");
+          content = content.replace('\n', ' ');
           let index = content.indexOf('AGE');
           index = content.indexOf(' ', index + 1);
           while(index != -1) {
