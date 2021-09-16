@@ -101,7 +101,8 @@ spec:
           reject(err);
         else {
           let podArray = new Array();
-          const content = data.toString().replace(/ +/g, " "); //여러 공백을 공백 하나로 치환
+          let content = data.toString().replace(/ +/g, " "); //여러 공백을 공백 하나로 치환
+          content = content.toString().replace("\n", " ");
           let index = content.indexOf('AGE');
           while(index != -1) {
             let start = content.indexOf(' ', index + 1);
@@ -149,7 +150,8 @@ spec:
           reject(err);
         else {
           let serviceArray = new Array();
-          const content = data.toString().replace(/ +/g, " "); //여러 공백을 공백 하나로 치환
+          let content = data.toString().replace(/ +/g, " "); //여러 공백을 공백 하나로 치환
+          content = content.toString().replace("\n", " ");
           let index = content.indexOf('AGE');
           while(index != -1) {
             let start = content.indexOf(' ', index + 1);
