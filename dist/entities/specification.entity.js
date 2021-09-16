@@ -54,6 +54,10 @@ __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
 ], SpecEntity.prototype, "port", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], SpecEntity.prototype, "sourceCodeURL", void 0);
 SpecEntity = __decorate([
     (0, typeorm_1.Entity)({ name: 'specification' })
 ], SpecEntity);

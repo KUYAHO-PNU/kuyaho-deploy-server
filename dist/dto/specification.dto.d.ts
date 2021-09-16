@@ -10,4 +10,5 @@ export declare class specificationDto {
     readonly vpcConfig: string;
     readonly plaform: string;
     readonly port: number;
+    readonly sourcecodeURL: string;
 }

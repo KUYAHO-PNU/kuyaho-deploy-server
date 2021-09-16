@@ -10,4 +10,5 @@ export declare class SpecEntity implements specification {
     timeout: number;
     vpcConfig: string;
     port: number;
+    sourceCodeURL: string;
 }

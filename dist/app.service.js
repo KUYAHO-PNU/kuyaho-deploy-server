@@ -14,7 +14,8 @@ let AppService = class AppService {
     getHello() {
         return 'Hello World!';
     }
-    createdocker(data) {
+    async createdocker(data) {
+        shell.exec(`git clone ${data.sourcecodeURL} /home/ec2-user/clone`);
         var line = "FROM " + data.runtime + " AS builder\n";
         fs.writeFileSync("/home/ec2-user/clone/" + data.functionName + "/Dockerfile", line, 'utf-8');
         line = "WORKDIR /app\n" + "COPY . .\n" + "RUN npm install\nRUN npm run build\n\n" +

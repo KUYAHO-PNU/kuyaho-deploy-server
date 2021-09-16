@@ -98,136 +98,42 @@ spec:
     shell.exec('yaml2json pods.yaml > pods.json')
 
     return new Promise<any>((resolve, reject) => {
-      var json = fs.readFile('pods.json',(err,data)=>{
+      fs.readFile('pods.json',(err,data)=>{
         if(err){
           reject(err)
-        }else{resolve(data.toJSON)}
+        }else{resolve(JSON.parse(data.toString()))}
       })  
     })
     
-    return
-    // shell.exec(`kubectl get pod > pod.txt`);
 
-    // return new Promise((resolve, reject) => {
-    //   fs.readFile(`pod.txt`, (err, data)=>{
-    //     if (err) 
-    //       reject(err);
-    //     else {
-    //       let podArray = new Array();
-    //       let content = data.toString().replace(/ +/g, " "); //여러 공백을 공백 하나로 치환
-    //       let index = content.indexOf('AGE');
-    //       index = content.indexOf(' ', index + 1);
-    //       while(index != -1) {
-    //         let start = index;
-    //         let end = content.indexOf(' ', start + 1);
-    //         let name = content.substring(start + 1, end);
-
-    //         start = end;
-    //         end = content.indexOf(' ', start + 1);
-    //         let ready = content.substring(start + 1, end);
-
-    //         start = end;
-    //         end = content.indexOf(' ', start + 1);
-    //         let status = content.substring(start + 1, end);
-
-    //         start = end;
-    //         end = content.indexOf(' ', start + 1);
-    //         let restarts = content.substring(start + 1, end);
-
-    //         start = end;
-    //         end = content.indexOf('\n', start + 1);
-    //         let age;
-    //         if (end == -1){
-    //           age = content.substring(start + 1);
-    //           age = age.slice(0, -1);
-    //         }
-    //         else {
-    //           age = content.substring(start + 1, end);
-    //         }
-
-    //         let pod = {"name": name, "ready": ready, "status": status, "restarts": restarts, "age": age};
-    //         podArray.push(pod);
-    //         index = end;
-    //       }
-    //       resolve(podArray);
-    //       // let start = content.indexOf(`${name}-service`);
-    //       // start = content.indexOf(' ', start + 1);
-    //       // start = content.indexOf(' ', start + 1);
-    //       // start = content.indexOf(' ', start + 1);
-    //       // const end = content.indexOf(' ', start + 1);
-    //       // resolve(content.substring(start + 1, end)); //해당 서비스의 external ip를 리턴
-    //     }
-    //   })
-    // });
   }
   async getPodByName(name: string): Promise<Array<any>> {
     shell.exec(`kubectl get pods ${name} -o yaml > pods.yaml`)
     shell.exec('yaml2json pods.yaml > pods.json')
 
     return new Promise<any>((resolve, reject) => {
-      var json = fs.readFile('pods.json',(err,data)=>{
+      fs.readFile('pods.json',(err,data)=>{
         if(err){
           reject(err)
-        }else{resolve(data.toJSON)}
+        }else{resolve(JSON.parse(data.toString()))}
       })  
     })
   }
 
   async getServices(): Promise<Array<Object>> {
-    shell.exec(`kubectl get service > service.txt`);
+    
+    shell.exec(`kubectl get service -o yaml > service.yaml`)
+    shell.exec('yaml2json service.yaml > service.json')
 
-    return new Promise((resolve, reject) => {
-      fs.readFile(`service.txt`, (err, data)=>{
-        if (err) 
-          reject(err);
-        else {
-          let serviceArray = new Array();
-          let content = data.toString().replace(/ +/g, " "); //여러 공백을 공백 하나로 치환
-          content = content.replace('\n', ' ');
-          let index = content.indexOf('AGE');
-          index = content.indexOf(' ', index + 1);
-          while(index != -1) {
-            let start = index;
-            let end = content.indexOf(' ', start + 1);
-            let name = content.substring(start + 1, end);
-
-            start = end;
-            end = content.indexOf(' ', start + 1);
-            let type = content.substring(start + 1, end);
-
-            start = end;
-            end = content.indexOf(' ', start + 1);
-            let clusterIP = content.substring(start + 1, end);
-
-            start = end;
-            end = content.indexOf(' ', start + 1);
-            let externalIP = content.substring(start + 1, end);
-
-            start = end;
-            end = content.indexOf(' ', start + 1);
-            let port = content.substring(start + 1, end);
-
-            start = end;
-            end = content.indexOf('\n', start + 1);
-            let age;
-            if (end == -1){
-              age = content.substring(start + 1);
-              age = age.slice(0, -1);
-            }
-            else {
-              age = content.substring(start + 1, end);
-            }
-
-            // if (name!="kubernetes") {
-              let service = {"name": name, "type": type, "clusterIP": clusterIP, "externalIP": externalIP, "port": port, "age": age};
-              serviceArray.push(service);
-            // }
-            index = end;
-          }
-          resolve(serviceArray);
-        }
-      })
-    });
+    return new Promise<any>((resolve, reject) => {
+      fs.readFile('service.json',(err,data)=>{
+        if(err){
+          reject(err)
+        }else{resolve(JSON.parse(data.toString()))}
+      })  
+    })
   }
+    
+        
 }
 
