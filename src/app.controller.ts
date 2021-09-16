@@ -11,8 +11,8 @@ export class AppController {
   getHello(): string {
     return this.appService.getHello();
   }
-  @Get("/createDockerFile")
-  createdocker(@Param('data') data:specificationDto) {
+  @Post("/createDockerFile")
+  createdocker(@Body() data:specificationDto) {
   
     return this.appService.createdocker(data);
   }

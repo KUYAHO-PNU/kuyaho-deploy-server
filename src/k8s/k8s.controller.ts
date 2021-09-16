@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Post, Body } from '@nestjs/common';
 import { specificationDto } from 'src/dto/specification.dto';
 import { K8sService } from './k8s.service';
 
@@ -6,23 +6,23 @@ import { K8sService } from './k8s.service';
 export class K8sController {
     constructor(private readonly containerService: K8sService) {}
 
-    @Get('createDeployment')
+    @Post('createDeployment')
     // const image = 'cloudnatived/demo:hello'
-    async createDeployment(@Param('name') name:string ,@Param('image') image:string, @Param('port') port:string): Promise<any> {
+    async createDeployment(@Body() data:any): Promise<any> {
         
-        return await this.containerService.createDeployment(name, image, port);
+        return await this.containerService.createDeployment(data.name, data.image, data.port);
     }
 
-    @Get('createService')
-    async createService(@Param('name') name:string ,@Param('port') port:string): Promise<String> {
+    @Post('createService')
+    async createService(@Body() data: any): Promise<String> {
 
-        return await this.containerService.createService(name, port);
+        return await this.containerService.createService(data.name, data.port);
     }
 
-    @Get('deleteAll')
-    async deleteAll(@Param('name') name:string): Promise<String> {
+    @Post('deleteAll')
+    async deleteAll(@Body() data:any): Promise<String> {
         
-        return await this.containerService.deleteAll(name);
+        return await this.containerService.deleteAll(data.name);
     }
     
     // @Get('portForwarding')

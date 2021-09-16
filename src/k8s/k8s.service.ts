@@ -46,9 +46,9 @@ spec:
         ports:
         - containerPort: ${port}`;
     try {
-      fs.writeFileSync(`/home/ec2-user/${name}/deployment.yaml`, data, 'utf8');
+      fs.writeFileSync(`/home/ec2-user/clone/${name}/deployment.yaml`, data, 'utf8');
       console.log(name + ' deployment.yaml 파일 생성 완료');
-      shell.exec(`kubectl apply -f /home/ec2-user/${name}/deployment.yaml`);
+      shell.exec(`kubectl apply -f /home/ec2-user/clone/${name}/deployment.yaml`);
     }
     catch(err) {
       console.log(name + ' deployment.yaml 파일 생성 중 에러\n' + err); 
@@ -71,9 +71,9 @@ spec:
     app: ${name}
   type: LoadBalancer`;
     try {
-      fs.writeFileSync(`/home/ec2-user/${name}/service.yaml`, data, 'utf8');
+      fs.writeFileSync(`/home/ec2-user/clone/${name}/service.yaml`, data, 'utf8');
       console.log(name + ' service.yaml 파일 생성 완료');
-      shell.exec(`kubectl apply -f /home/ec2-user/${name}/service.yaml`);
+      shell.exec(`kubectl apply -f /home/ec2-user/clone/${name}/service.yaml`);
       delay(500);
       shell.exec(`kubectl get service > service.txt`);
 
