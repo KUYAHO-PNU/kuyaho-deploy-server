@@ -102,7 +102,7 @@ spec:
         else {
           let podArray = new Array();
           let content = data.toString().replace(/ +/g, " "); //여러 공백을 공백 하나로 치환
-          content = content.toString().replace("\n", " ");
+          content = content.replace("\n", " ");
           let index = content.indexOf('AGE');
           index = content.indexOf(' ', index + 1);
           while(index != -1) {
@@ -127,6 +127,7 @@ spec:
             let age;
             if (end == -1){
               age = content.substring(start + 1);
+              age = age.slice(0, -1);
             }
             else {
               age = content.substring(start + 1, end);
@@ -160,8 +161,9 @@ spec:
           let content = data.toString().replace(/ +/g, " "); //여러 공백을 공백 하나로 치환
           content = content.toString().replace("\n", " ");
           let index = content.indexOf('AGE');
+          index = content.indexOf(' ', index + 1);
           while(index != -1) {
-            let start = content.indexOf(' ', index + 1);
+            let start = index;
             let end = content.indexOf(' ', start + 1);
             let name = content.substring(start + 1, end);
 
@@ -183,13 +185,20 @@ spec:
 
             start = end;
             end = content.indexOf(' ', start + 1);
-            let age = content.substring(start + 1, end);
+            let age;
+            if (end == -1){
+              age = content.substring(start + 1);
+              age = age.slice(0, -1);
+            }
+            else {
+              age = content.substring(start + 1, end);
+            }
 
             if (name!="kubernetes") {
               let service = {"name": name, "type": type, "clusterIP": clusterIP, "externalIP": externalIP, "port": port, "age": age};
               serviceArray.push(service);
             }
-            index = content.indexOf(' ', end + 1);
+            index = end;
           }
           resolve(serviceArray);
         }
