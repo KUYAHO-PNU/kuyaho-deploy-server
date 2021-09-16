@@ -194,10 +194,10 @@ spec:
               age = content.substring(start + 1, end);
             }
 
-            if (name!="kubernetes") {
+            // if (name!="kubernetes") {
               let service = {"name": name, "type": type, "clusterIP": clusterIP, "externalIP": externalIP, "port": port, "age": age};
               serviceArray.push(service);
-            }
+            // }
             index = end;
           }
           resolve(serviceArray);
