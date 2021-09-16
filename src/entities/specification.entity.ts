@@ -24,5 +24,7 @@ export class SpecEntity implements specification{
     vpcConfig: string;
     @Column()
     port: number;
+    @Column()
+    sourcecodeURL: string;
 }
 

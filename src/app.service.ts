@@ -22,26 +22,26 @@ export class AppService {
     return 'Hello World!';
   }
     // 인자값 data:specificationDto port number를 얻으면 EXPOSE portNumber
-    createdocker(data:specificationDto, ){ 
+    async createdocker(data:specificationDto, ){ 
       //data.runtime
-      
+      shell.exec(`git clone ${data.sourcecodeURL} /home/ec2-user/clone`)
       var line ="FROM "+data.runtime +" AS builder\n"
-      fs.writeFile("/home/ec2-user/clone/"+data.functionName+"/Dockerfile",line,'utf-8',(err)=>{})
+      fs.writeFileSync("/home/ec2-user/clone/"+data.functionName+"/Dockerfile",line,'utf-8',)
       //setting Path project directory
       line = "WORKDIR /app\n"+"COPY . .\n"+"RUN npm install\nRUN npm run build\n\n"+
-      "FROM"+data.runtime +"\n"+"COPY --from=builder /app ./\n"+"CMD [\"npm\",\"run\",\"start:prod\"]\n"
-      fs.appendFile("Dockerfile",line,'utf-8',(err)=>{})
+      "FROM "+data.runtime +"\n"+"COPY --from=builder /app ./\n"+"CMD [\"npm\",\"run\",\"start:prod\"]\n"
+      fs.appendFileSync("/home/ec2-user/clone/"+data.functionName+"/Dockerfile",line,'utf-8',)
       
     
       //dockerignore
       line = "node_modules\ndist"
-      fs.writeFile("/home/ec2-user/clone/"+data.functionName+"/.dockerignore",line,'utf-8',(err)=>{})
+      fs.writeFileSync("/home/ec2-user/clone/"+data.functionName+"/.dockerignore",line,'utf-8',)
       
   
       //update json.file
       // line = "\"prestart:prod\": \"rimraf dist && npm run build\","
       // fs.readFile("/home/ec2-user/gyuwon/server/user/package.json",,)
-      // fs.writeFile("/home/ec2-user/gyuwon/server/user/package.json",)ls
+      // fs.writeFile("/home/ec2-user/gyuwon/server/user/package.json",)
 
       shell.exec(`docker build -t dhd6573/${data.functionName}:demo /home/ec2-user/clone/${data.functionName}/.`)
       shell.exec(`docker push dhd6573/${data.functionName}:demo`)
