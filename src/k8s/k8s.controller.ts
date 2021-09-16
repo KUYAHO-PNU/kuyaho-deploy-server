@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post, Body } from '@nestjs/common';
+import { Controller, Get, Param, Post, Body, Query } from '@nestjs/common';
 import { specificationDto } from 'src/dto/specification.dto';
 import { K8sService } from './k8s.service';
 
@@ -9,20 +9,27 @@ export class K8sController {
     @Post('createDeployment')
     // const image = 'cloudnatived/demo:hello'
     async createDeployment(@Body() data:any): Promise<any> {
-        
         return await this.containerService.createDeployment(data.name, data.image, data.port);
     }
 
     @Post('createService')
     async createService(@Body() data: any): Promise<String> {
-
         return await this.containerService.createService(data.name, data.port);
     }
 
     @Post('deleteAll')
     async deleteAll(@Body() data:any): Promise<String> {
-        
         return await this.containerService.deleteAll(data.name);
+    }
+
+    @Get('getPods')
+    async getPods(): Promise<Array<Object>> {
+        return await this.containerService.getPods();
+    }
+
+    @Get('getServices')
+    async getServices(): Promise<Array<Object>> {
+        return await this.containerService.getServices();
     }
     
     // @Get('portForwarding')
