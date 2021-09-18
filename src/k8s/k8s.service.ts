@@ -108,7 +108,7 @@ spec:
 
   }
   async getPodByName(name: string): Promise<Array<any>> {
-    shell.exec(`kubectl get pods ${name} -o yaml > pods.yaml`)
+    shell.exec(`kubectl get pods --selector=app=${name} -o yaml > pods.yaml`)
     shell.exec('yaml2json pods.yaml > pods.json')
 
     return new Promise<any>((resolve, reject) => {
