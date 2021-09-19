@@ -24,7 +24,7 @@ export class AppService {
     // 인자값 data:specificationDto port number를 얻으면 EXPOSE portNumber
     async createdocker(data:specificationDto, ){ 
       //data.runtime
-      shell.exec(`git clone ${data.sourcecodeURL} /home/ec2-user/clone`)
+      shell.exec(`git clone ${data.sourcecodeURL} /home/ec2-user/clone/${data.functionName}`)
       var line ="FROM "+data.runtime +" AS builder\n"
       fs.writeFileSync("/home/ec2-user/clone/"+data.functionName+"/Dockerfile",line,'utf-8',)
       //setting Path project directory
