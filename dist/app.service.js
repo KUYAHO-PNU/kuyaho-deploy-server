@@ -9,28 +9,22 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppService = void 0;
 const common_1 = require("@nestjs/common");
 const fs = require("fs");
+const shell = require("shelljs");
 let AppService = class AppService {
     getHello() {
         return 'Hello World!';
     }
-    createdocker(data) {
-        if (data.plaform == 'gcp') {
-            var line = "FROM " + data.runtime + " AS builder\n";
-            fs.writeFile("DockerFile", line, 'utf-8', (err) => { });
-            line = "WORKDIR /app\n" + "COPY . .\n" + "RUN npm install\nRUN npm run build\n\n" +
-                "FROM node:10-alpine\n" + "COPY --from=builder /app ./\n" + "CMD [\"npm\",\"run\",\"start:prod\"]\n";
-            fs.appendFile("DockerFile", line, 'utf-8', (err) => { });
-        }
-        else if (data.plaform == 'aws') {
-            var line = "FROM public.ecr.aws/lambda/" + data.runtime + "\n";
-            fs.writeFile("DockerFile", line, 'utf-8', (err) => { });
-            line = "COPY src/main.ts package.json  /var/task/\n" + "RUN npm install\n" + "CMD [ \"app.handler\" ]" +
-                "RUN docker build -t name.\n" + "RUN docker run -p 9000:8080 name ";
-            fs.appendFile("DockerFile", line, 'utf-8', (err) => { });
-        }
+    async createdocker(data) {
+        shell.exec(`git clone ${data.sourcecodeURL} /home/ec2-user/clone`);
+        var line = "FROM " + data.runtime + " AS builder\n";
+        fs.writeFileSync("/home/ec2-user/clone/" + data.functionName + "/Dockerfile", line, 'utf-8');
+        line = "WORKDIR /app\n" + "COPY . .\n" + "RUN npm install\nRUN npm run build\n\n" +
+            "FROM " + data.runtime + "\n" + "COPY --from=builder /app ./\n" + "CMD [\"npm\",\"run\",\"start:prod\"]\n";
+        fs.appendFileSync("/home/ec2-user/clone/" + data.functionName + "/Dockerfile", line, 'utf-8');
         line = "node_modules\ndist";
-        fs.writeFile(".dockerignore", line, 'utf-8', (err) => { });
-        return 'Hello---- World!';
+        fs.writeFileSync("/home/ec2-user/clone/" + data.functionName + "/.dockerignore", line, 'utf-8');
+        shell.exec(`docker build -t dhd6573/${data.functionName}:demo /home/ec2-user/clone/${data.functionName}/.`);
+        shell.exec(`docker push dhd6573/${data.functionName}:demo`);
     }
 };
 AppService = __decorate([

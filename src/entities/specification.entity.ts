@@ -22,5 +22,9 @@ export class SpecEntity implements specification{
     timeout: number;
     @Column()
     vpcConfig: string;
+    @Column()
+    port: number;
+    @Column()
+    sourceCodeURL: string;
 }
 

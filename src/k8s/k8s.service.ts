@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import * as fs from 'fs';
+import { delay } from 'rxjs';
 import shell = require('shelljs')
+import YAML = require('yamljs')
+
+const ec2_path = `/home/ec2-user/clone`;
 
 @Injectable()
 export class K8sService { 
@@ -21,7 +25,7 @@ export class K8sService {
   }
   */
 
-  async createDeployment(name: String, image: String, port: Number): Promise<any> {
+  async createDeployment(name: String, image: String, port: string, cpu: string, memory: string): Promise<any> {
     const data = `
 apiVersion: apps/v1
 kind: Deployment
@@ -43,20 +47,25 @@ spec:
       - name: ${name}
         image: ${image}
         ports:
-        - containerPort: ${port}`;
+        - containerPort: ${port}
+        resources:
+          requests:
+            cpu: 250m
+            memory: 8Mi
+          limits:
+            cpu: ${cpu}
+            memory: ${memory}`;
     try {
-      if (!fs.existsSync(`../${name}`))
-        fs.mkdirSync(`../${name}`);
-      fs.writeFileSync(`../${name}/deployment.yaml`, data, 'utf8');
+      fs.writeFileSync(`${ec2_path}/${name}/deployment.yaml`, data, 'utf8');
       console.log(name + ' deployment.yaml 파일 생성 완료');
-      shell.exec(`kubectl apply -f ../${name}/deployment.yaml`);
+      shell.exec(`kubectl apply -f ${ec2_path}/${name}/deployment.yaml`);
     }
     catch(err) {
       console.log(name + ' deployment.yaml 파일 생성 중 에러\n' + err); 
     }
   }
 
-  async createService(name: String, port: Number): Promise<String> {
+  async createService(name: String, port: string): Promise<String> {
     const data = `
 apiVersion: v1
 kind: Service
@@ -72,29 +81,9 @@ spec:
     app: ${name}
   type: LoadBalancer`;
     try {
-      if (!fs.existsSync(`../${name}`))
-        fs.mkdirSync(`../${name}`);
-      fs.writeFileSync(`../${name}/service.yaml`, data, 'utf8');
+      fs.writeFileSync(`${ec2_path}/${name}/service.yaml`, data, 'utf8');
       console.log(name + ' service.yaml 파일 생성 완료');
-      shell.exec(`kubectl apply -f ../${name}/service.yaml`);
-      
-      shell.exec(`kubectl get service > service.txt`);
-
-      return new Promise((resolve, reject) => {
-        fs.readFile(`service.txt`, (err, data)=>{
-          if (err) 
-            reject(err);
-          else {
-            const content = data.toString().replace(/ +/g, " "); //여러 공백을 공백 하나로 치환
-            let start = content.indexOf(`${name}-service`);
-            start = content.indexOf(' ', start + 1);
-            start = content.indexOf(' ', start + 1);
-            start = content.indexOf(' ', start + 1);
-            const end = content.indexOf(' ', start + 1);
-            resolve(content.substring(start + 1, end)); //해당 서비스의 external ip를 리턴
-          }
-        })
-      });
+      shell.exec(`kubectl apply -f ${ec2_path}/${name}/service.yaml`);
     }
     catch(err) {
       console.log(name + ' service.yaml 파일 생성 중 에러\n' + err);
@@ -110,5 +99,74 @@ spec:
   // async portForwarding(name: String, targetPort: Number, port: Number): Promise<any> {
   //   shell.exec(`kubectl port-forward service/${name}-service ${targetPort}:${port}`);
   // }
+
+  async getPods(): Promise<Array<any>> {
+    shell.exec('kubectl get pods -o yaml > pods.yaml')
+    shell.exec('yaml2json pods.yaml > pods.json')
+
+    return new Promise<any>((resolve, reject) => {
+      fs.readFile('pods.json',(err,data)=>{
+        if(err){
+          reject(err)
+        }else{
+          resolve(JSON.parse(data.toString()))}
+      })  
+    })
+  }
+
+  async getPodByName(name: string): Promise<Array<any>> {
+    shell.exec(`kubectl get pods --selector=app=${name} -o yaml > pods.yaml`)
+    shell.exec('yaml2json pods.yaml > pods.json')
+
+    return new Promise<any>((resolve, reject) => {
+      fs.readFile('pods.json',(err,data)=>{
+        if(err){
+          reject(err)
+        }else{
+          resolve(JSON.parse(data.toString()))}
+      })  
+    })
+  }
+
+  async getServices(): Promise<Array<Object>> {
+    
+    shell.exec(`kubectl get service -o yaml > service.yaml`)
+    shell.exec('yaml2json service.yaml > service.json')
+
+    return new Promise<any>((resolve, reject) => {
+      fs.readFile('service.json',(err,data)=>{
+        if(err){
+          reject(err)
+        }else{
+          resolve(JSON.parse(data.toString()))}
+      })  
+    })
+  }
+
+  async getDeploymentYaml(name: String): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      fs.readFile(`${ec2_path}/${name}/deployment.yaml`, (err, data) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(data.toString());
+        }
+      })  
+    })
+  }
+
+  async getServiceYaml(name: String): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      fs.readFile(`${ec2_path}/${name}/service.yaml`, (err, data) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(data.toString());
+        }
+      })  
+    })
+  }
+    
+        
 }
 

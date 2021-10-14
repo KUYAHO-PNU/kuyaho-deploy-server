@@ -6,6 +6,7 @@ import { fileDto } from './dto/file.dto';
 import { specificationDto } from './dto/specification.dto';
 import { FileEntity } from './entities/file.entity';
 import { SpecEntity } from './entities/specification.entity';
+import shell = require('shelljs');
 
 @Injectable()
 export class AppService {
@@ -20,33 +21,31 @@ export class AppService {
   getHello(): string {
     return 'Hello World!';
   }
-  // 인자값 data:specificationDto
-  createdocker(data:specificationDto, ){
-    if(data.plaform=='gcp'){
-    //data.runtime
-    var line ="FROM "+data.runtime +" AS builder\n"
-    fs.writeFile("DockerFile",line,'utf-8',(err)=>{})
-    //setting Path project directory
-    line = "WORKDIR /app\n"+"COPY . .\n"+"RUN npm install\nRUN npm run build\n\n"+
-    "FROM node:10-alpine\n"+"COPY --from=builder /app ./\n"+"CMD [\"npm\",\"run\",\"start:prod\"]\n"
-    fs.appendFile("DockerFile",line,'utf-8',(err)=>{})
-  }
-  //AWS Function imagefile
-  else if(data.plaform=='aws'){
-    // data:specificationDto
-    var line ="FROM public.ecr.aws/lambda/"+data.runtime+"\n"
-    fs.writeFile("DockerFile",line,'utf-8',(err)=>{})
-    // name= data.fuctionName
-    line = "COPY src/main.ts package.json  /var/task/\n" +"RUN npm install\n"+"CMD [ \"app.handler\" ]"+
-    "RUN docker build -t name.\n"+"RUN docker run -p 9000:8080 name "
-    fs.appendFile("DockerFile",line,'utf-8',(err)=>{})
+    // 인자값 data:specificationDto port number를 얻으면 EXPOSE portNumber
+    async createdocker(data:specificationDto, ){ 
+      //data.runtime
+      shell.exec(`git clone ${data.sourcecodeURL} /home/ec2-user/clone/${data.functionName}`)
+      var line ="FROM "+data.runtime +" AS builder\n"
+      fs.writeFileSync("/home/ec2-user/clone/"+data.functionName+"/Dockerfile",line,'utf-8',)
+      //setting Path project directory
+      line = "WORKDIR /app\n"+"COPY . .\n"+"RUN npm install\nRUN npm run build\n\n"+
+      "FROM "+data.runtime +"\n"+"COPY --from=builder /app ./\n"+"CMD [\"npm\",\"run\",\"start:prod\"]\n"
+      fs.appendFileSync("/home/ec2-user/clone/"+data.functionName+"/Dockerfile",line,'utf-8',)
+      
+    
+      //dockerignore
+      line = "node_modules\ndist"
+      fs.writeFileSync("/home/ec2-user/clone/"+data.functionName+"/.dockerignore",line,'utf-8',)
+      
   
-  }
-    //dockerignore
-    line = "node_modules\ndist"
-    fs.writeFile(".dockerignore",line,'utf-8',(err)=>{})
-    return 'Hello---- World!';
-  }
+      //update json.file
+      // line = "\"prestart:prod\": \"rimraf dist && npm run build\","
+      // fs.readFile("/home/ec2-user/gyuwon/server/user/package.json",,)
+      // fs.writeFile("/home/ec2-user/gyuwon/server/user/package.json",)
+
+      shell.exec(`docker build -t dhd6573/${data.functionName}:demo /home/ec2-user/clone/${data.functionName}/.`)
+      shell.exec(`docker push dhd6573/${data.functionName}:demo`)
+    }
   //------------------File CRUD----------------------------
 
   // async createFile(data:fileDto){

@@ -1,5 +1,5 @@
 import { specificationDto } from './dto/specification.dto';
 export declare class AppService {
     getHello(): string;
-    createdocker(data: specificationDto): string;
+    createdocker(data: specificationDto): Promise<void>;
 }

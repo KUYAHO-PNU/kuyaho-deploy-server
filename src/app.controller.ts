@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { AppService } from './app.service';
 import { specificationDto } from './dto/specification.dto';
 
@@ -11,21 +11,9 @@ export class AppController {
   getHello(): string {
     return this.appService.getHello();
   }
-  @Get("/createDockerFile")
-  createdocker() {
-    const data:specificationDto={
-      userId:"",
-      functionName:"",
-      environments:"",
-      imageConfig:"",
-      memorySize:0,
-      region:"",
-      runtime:"node:14",
-      timeout:0,
-      vpcConfig:"",
-      plaform:"aws"
-    }
-   
+  @Post("/createDockerFile")
+  createdocker(@Body() data:specificationDto) {
+  
     return this.appService.createdocker(data);
   }
 //   @Get('/specfind')
